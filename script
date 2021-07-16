@@ -29,5 +29,4 @@ function volume_down () {
         }
         videos[idx].volume = 0.1;
     }
-    return true;
 }
