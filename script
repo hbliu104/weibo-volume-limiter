@@ -2,16 +2,16 @@
 // @name         Sound Limiter for Weibo & Douyin Video Clips
 // @name:zh-CN   微博抖音视频音量限制器
 // @namespace    http://tampermonkey.net/
-// @version      0.7
+// @version      0.8
 // @description  Limit the default sound volume of video clips on weibo.com to 10%.
 // @description:zh-cn  限制微博和抖音视频的默认音量为10%
 // @icon         https://raw.githubusercontent.com/hbliu104/weibo-volume-limiter/main/vol_down.png
 // @author       Lophelia
-// @include        http://f.video.weibocdn.com/*
-// @include        https://video.h5.weibo.cn/*
-// @include        https://*weibo.com/*
-// @include        https://*douyin.com/*
-// @require  http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
+// @match        http://f.video.weibocdn.com/*
+// @match        https://video.h5.weibo.cn/*
+// @match        https://*weibo.com/*
+// @match        https://*douyin.com/*
+// @require      http://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @run-at document-idle
 // ==/UserScript==
 
@@ -33,42 +33,41 @@ function waitForKeyElements (
 ) {
     var targetNodes, btargetsFound;
 
-    if (typeof iframeSelector == "undefined")
-        targetNodes     = $(selectorTxt);
-    else
-        targetNodes     = $(iframeSelector).contents ()
-                                           .find (selectorTxt);
+    if (typeof iframeSelector == "undefined"){
+        targetNodes = $(selectorTxt);}
+    else{
+        targetNodes = $(iframeSelector).contents ().find (selectorTxt);}
 
-    if (targetNodes  &&  targetNodes.length > 0) {
-        btargetsFound   = true;
+    if (targetNodes && targetNodes.length > 0) {
+        btargetsFound = true;
         /*--- Found target node(s).  Go through each and act if they
             are new.
         */
         targetNodes.each ( function () {
-            var jThis        = $(this);
-            var alreadyFound = jThis.data ('alreadyFound')  ||  false;
+            var jThis = $(this);
+            var alreadyFound = jThis.data ('alreadyFound') || false;
 
             if (!alreadyFound) {
                 //--- Call the payload function.
-                var cancelFound     = actionFunction (jThis);
-                if (cancelFound)
-                    btargetsFound   = false;
-                else
-                    jThis.data ('alreadyFound', true);
+                var cancelFound = actionFunction (jThis);
+                if (cancelFound){
+                    btargetsFound = false;}
+                else{
+                    jThis.data ('alreadyFound', true);}
             }
         } );
     }
     else {
-        btargetsFound   = false;
+        btargetsFound = false;
     }
 
     //--- Get the timer-control variable for this selector.
-    var controlObj      = waitForKeyElements.controlObj  ||  {};
-    var controlKey      = selectorTxt.replace (/[^\w]/g, "_");
-    var timeControl     = controlObj [controlKey];
+    var controlObj = waitForKeyElements.controlObj || {};
+    var controlKey = selectorTxt.replace (/[^\w]/g, "_");
+    var timeControl = controlObj [controlKey];
 
     //--- Now set or clear the timer as appropriate.
-    if (btargetsFound  &&  bWaitOnce  &&  timeControl) {
+    if (btargetsFound && bWaitOnce && timeControl) {
         //--- The only condition where we need to clear the timer.
         clearInterval (timeControl);
         delete controlObj [controlKey]
@@ -77,10 +76,10 @@ function waitForKeyElements (
         //--- Set a timer, if needed.
         if ( ! timeControl) {
             timeControl = setInterval ( function () {
-                    waitForKeyElements (    selectorTxt,
-                                            actionFunction,
-                                            bWaitOnce,
-                                            iframeSelector
+                    waitForKeyElements (selectorTxt,
+                                        actionFunction,
+                                        bWaitOnce,
+                                        iframeSelector
                                         );
                 },
                 300
@@ -88,7 +87,7 @@ function waitForKeyElements (
             controlObj [controlKey] = timeControl;
         }
     }
-    waitForKeyElements.controlObj   = controlObj;
+    waitForKeyElements.controlObj = controlObj;
 }
 
 let flag = 0;
@@ -96,19 +95,15 @@ let flag = 0;
 waitForKeyElements ("video", volume_down);
 
 function volume_down () {
-    let videos = document.getElementsByTagName('video');
+    let videos = document.querySelectorAll('video');
     for (let idx = 0; idx < videos.length; idx++)
     {
-        if (videos[idx].hasAttribute('autoplay'))
-        {
-            videos[idx].removeAttribute('autoplay');
-        }
+        if (videos[idx].hasAttribute('autoplay')){
+            videos[idx].removeAttribute('autoplay');}
+
         videos[idx].volume = 0.1;
         flag++;
     }
-    if (flag < 2)
-    {
-        return true;
-    }
-
+    if (flag < 2){
+        return true;}
 }
