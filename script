@@ -2,15 +2,15 @@
 // @name         Sound Limiter for Weibo & Douyin Video Clips
 // @name:zh-CN   微博抖音视频音量限制器
 // @namespace    http://tampermonkey.net/
-// @version      0.9
+// @version      0.10
 // @description  Limit the default sound volume of video clips on weibo.com to 10%.
 // @description:zh-cn  限制微博和抖音视频的默认音量为10%
 // @icon         https://raw.githubusercontent.com/hbliu104/weibo-volume-limiter/main/vol_down.png
 // @author       https://github.com/hbliu104/weibo-volume-limiter
 // @match        https://f.video.weibocdn.com/*
 // @match        https://video.h5.weibo.cn/*
-// @match        https://*weibo.com/*
-// @match        https://*douyin.com/*
+// @match        https://*.weibo.com/*
+// @match        https://*.douyin.com/*
 // @require      https://ajax.googleapis.com/ajax/libs/jquery/1.7.2/jquery.min.js
 // @run-at document-idle
 // ==/UserScript==
